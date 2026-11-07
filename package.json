@@ -1,0 +1,98 @@
+{
+  "name": "local-pick-goods",
+  "version": "0.1.0",
+  "private": true,
+  "description": "dsh-go 选品参谋：把「怎么挑商品」固化成胶囊 + 原生面板，配套 pick-goods 技能",
+  "type": "module",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "skill"
+  ],
+  "keywords": [
+    "dsh-go",
+    "dsh-go-plugin",
+    "shopping",
+    "product-research"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-rc.2 <0.3.0-0"
+  },
+  "dshGo": {
+    "v": 1,
+    "title": {
+      "zh": "选品参谋",
+      "en": "Pick Advisor"
+    },
+    "icon": "badge",
+    "wants": [
+      "draft"
+    ],
+    "contributes": {
+      "composer.tools": [
+        {
+          "id": "pick-book",
+          "label": {
+            "zh": "选品手册",
+            "en": "Guide"
+          },
+          "icon": "book",
+          "panel": "book"
+        },
+        {
+          "id": "pick-std",
+          "label": {
+            "zh": "标准号",
+            "en": "GB ref"
+          },
+          "icon": "list",
+          "panel": "std"
+        }
+      ],
+      "panels": [
+        {
+          "id": "entry",
+          "title": {
+            "zh": "选品参谋",
+            "en": "Pick Advisor"
+          },
+          "icon": "badge",
+          "placement": [
+            "chat.panel"
+          ]
+        },
+        {
+          "id": "book",
+          "title": {
+            "zh": "选品手册",
+            "en": "Pick Guide"
+          },
+          "icon": "book",
+          "placement": [
+            "features"
+          ],
+          "presentation": "page"
+        },
+        {
+          "id": "std",
+          "title": {
+            "zh": "标准号速查",
+            "en": "GB Quick Ref"
+          },
+          "icon": "list",
+          "placement": [
+            "features"
+          ],
+          "presentation": "page"
+        }
+      ]
+    }
+  }
+}
