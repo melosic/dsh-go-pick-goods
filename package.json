@@ -1,8 +1,8 @@
 {
   "name": "local-pick-goods",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
-  "description": "dsh-go 选品参谋：把「怎么挑商品」固化成胶囊 + 原生面板，配套 pick-goods 技能",
+  "description": "dsh-go 选品参谋：把「怎么挑商品」固化成胶囊 + 原生面板，pick-goods 技能随插件加载",
   "type": "module",
   "main": "lib/index.js",
   "files": [

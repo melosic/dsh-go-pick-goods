@@ -1,12 +1,13 @@
 #!/bin/sh
-# 选品参谋 一键安装：把插件和技能装进本机 dsh-go。
+# 选品参谋 一键安装：把插件装进本机 dsh-go。
+# 技能随插件一起注册，不再单独安装。
 # 用法： sh install.sh
 set -e
 
 DSH_HOME="${DSH_HOME:-$HOME/.dsh}"
 HERE=$(cd "$(dirname "$0")" && pwd)
 PLUGIN_DIR="$DSH_HOME/dsh-go/plugins/local-pick-goods"
-SKILL_DIR="$DSH_HOME/skills/pick-goods"
+LEGACY_SKILL_DIR="$DSH_HOME/skills/pick-goods"
 
 echo "→ DSH_HOME = $DSH_HOME"
 
@@ -19,10 +20,11 @@ cp "$HERE/lib/index.js" "$PLUGIN_DIR/lib/index.js"
 cp "$HERE/skill/pick-goods/SKILL.md" "$PLUGIN_DIR/skill/pick-goods/SKILL.md"
 echo "✓ 插件已复制到 $PLUGIN_DIR"
 
-# 2. 技能（技能目录自动发现，不用注册）
-mkdir -p "$SKILL_DIR"
-cp "$HERE/skill/pick-goods/SKILL.md" "$SKILL_DIR/SKILL.md"
-echo "✓ 技能已复制到 $SKILL_DIR"
+# 2. 清掉旧版本单独安装的技能副本，否则它会盖过插件注册的那份
+if [ -d "$LEGACY_SKILL_DIR" ]; then
+  rm -rf "$LEGACY_SKILL_DIR"
+  echo "✓ 已移除旧版技能副本 $LEGACY_SKILL_DIR"
+fi
 
 # 3. 注册到当前 profile
 if command -v dsh >/dev/null 2>&1; then
@@ -36,4 +38,5 @@ else
 fi
 
 echo
-echo "装完了。打开 dsh-go → 设置 → 引擎 → 重启引擎，加号工具里就会出现「选品手册」「标准号速查」。"
+echo "装完了。打开 dsh-go → 设置 → 引擎 → 重启引擎。"
+echo "技能随插件加载：插件启用时 pick-goods 技能可用，关闭插件后技能一起消失。"

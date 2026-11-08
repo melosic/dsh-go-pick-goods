@@ -26,9 +26,9 @@
 | 组成 | 作用 |
 | --- | --- |
 | **技能**（`pick-goods`） | 真正起作用的部分。把四层信息漏斗、六张品类核验表、标准号事实卡、客服话术固化给 AI，让它在你说「帮我挑个 X」时按同一套流程走。 |
-| **插件**（`local-pick-goods`） | 让它顺手。把方法论做成手机上能翻能点的原生面板，点一下就变成一段发给 AI 的请求。 |
+| **插件**（`local-pick-goods`） | 让它顺手。把方法论做成手机上能翻能点的原生面板，点一下就变成一段发给 AI 的请求；**技能由插件在加载时注册**，插件停用后技能一起消失。 |
 
-两者独立可用：只装技能也能生效；装上插件，则多出三个面板和两个加号工具。
+技能和面板都在插件里：装上插件就有技能和三个面板，关掉插件则两者一起停用，不会出现「面板没了但 AI 还在按流程走」。
 
 ---
 
@@ -39,7 +39,7 @@
 不用手敲任何命令。在 [dsh-go](https://github.com/ccch1mneyyy/dsh-Go) 里新开一个对话，把下面这段原话发给它：
 
 > 帮我装这个 dsh-go 插件：https://github.com/melosic/dsh-go-pick-goods
-> 装到 `$DSH_HOME/dsh-go/plugins/` 和 `$DSH_HOME/skills/`，装完告诉我怎么重启引擎。
+> 装到 `$DSH_HOME/dsh-go/plugins/`，装完告诉我怎么重启引擎。
 
 它会克隆仓库、执行 `install.sh`、把插件注册进当前 profile。最后一步「重启引擎」需要你自己操作。
 
@@ -51,7 +51,7 @@ cd dsh-go-pick-goods
 sh install.sh
 ```
 
-脚本会做三件事：把插件复制到 `$DSH_HOME/dsh-go/plugins/local-pick-goods`、把技能复制到 `$DSH_HOME/skills/pick-goods/`、把插件注册进当前 profile。
+脚本会做三件事：把插件复制到 `$DSH_HOME/dsh-go/plugins/local-pick-goods`、清掉旧版单独安装的技能副本、把插件注册进当前 profile。
 
 ### 装完之后
 
@@ -87,7 +87,7 @@ sh install.sh
 
 ### 技能
 
-`skill/pick-goods/SKILL.md` 放进 `$DSH_HOME/skills/pick-goods/` 后会被自动发现，不需要注册。
+技能不是单独安装的文件，而是插件的 `skill/pick-goods/SKILL.md` 在插件加载时注册进技能目录——所以它跟插件的开关绑在一起：**插件启用，技能就在；插件停用，技能一起消失。**
 
 之后你说「帮我挑个吹风机」「这个靠谱吗」「比一下这几个」，AI 会走同一条流程：
 
@@ -137,8 +137,8 @@ AI 的动作大致是：
 .
 ├── package.json                 # 插件清单：dshGo 声明（面板、工具、图标）
 ├── cordis.patch.yml             # 让引擎加载本插件
-├── lib/index.js                 # 面板视图与点按处理
-├── skill/pick-goods/SKILL.md    # 选品方法论技能
+├── lib/index.js                 # 面板视图、点按处理、技能注册
+├── skill/pick-goods/SKILL.md    # 选品方法论技能（随插件加载）
 ├── install.sh                   # 一键安装
 └── README.md
 ```
@@ -179,7 +179,7 @@ AI 的动作大致是：
 面板里的数据是 2026-11-07 的快照。标准号会更新、新规会分批实施，隔上几个月再用之前，请以面板底部列出的官方入口复核一遍。
 
 **技能和插件必须一起装吗？**
-不必。技能负责方法，插件负责顺手；只装技能也会生效，只是要自己记住流程。
+不用分别装。技能由插件加载时注册，装上插件就有技能；关掉插件，技能也跟着停用。想只保留技能、不要面板，可以从 `skill/pick-goods/SKILL.md` 拷到 `$DSH_HOME/skills/pick-goods/` 手动安装一份。
 
 ---
 
